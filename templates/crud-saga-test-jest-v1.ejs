@@ -1,0 +1,212 @@
+/* ***********************************************************
+* Wiring Instructions
+* To make this test work, you'll need to:
+*  - Add a Fixture named get<%= props.name %> to the
+*    ./App/Services/FixtureApi file. You can just keep adding
+*    functions to that file.
+*************************************************************/
+
+import FixtureAPI from '../../../Services/FixtureApi'
+import { call, put, select } from 'redux-saga/effects'
+import { 
+  // get<%= props.name %>,
+  get<%= props.name %>s,
+  post<%= props.name %>,
+  update<%= props.name %>,
+  // remove<%= props.name %>,
+  theData,
+  // theUserPrefs,
+  transformedData,
+  theMulti
+} from '../sagas'
+import <%= props.name %>Actions from '../redux'
+import { mapAttributes, updateMulti, insertMulti } from '../../../Transforms/TransformAttributes'
+
+const stepper = (fn) => (mock) => fn.next(mock).value
+
+// it('first calls API', () => {
+//   const step = stepper(get<%= props.name %>(FixtureAPI, {data: 'taco'}))
+//   // first yield is the API
+//   expect(step()).toEqual(call(FixtureAPI.get<%= props.name %>, 'taco'))
+// })
+
+// it('success path', () => {
+//   const response = FixtureAPI.get<%= props.name %>('taco')
+//   const step = stepper(get<%= props.name %>(FixtureAPI, {data: 'taco'}))
+//   // Step 1: Hit the api
+//   step()
+//   // Step 2: Successful return and data!
+//   expect(step(response)).toEqual(put(<%= pascalCase(props.name) %>Actions.<%= camelCase(props.name) %>Success(21)))
+// })
+
+// it('failure path', () => {
+//   const response = {ok: false}
+//   const step = stepper(get<%= props.name %>(FixtureAPI, {data: 'taco'}))
+//   // Step 1: Hit the api
+//   step()
+//   // Step 2: Failed response.
+//   expect(step(response)).toEqual(put(<%= pascalCase(props.name) %>Actions.<%= camelCase(props.name) %>Failure()))
+// })
+
+const okIDResponse = {
+  ok: true,
+  data: { data: { attributes: { id: 'someValue', name: 'Something' } } }
+}
+const action = { type: '<%= props.name %>',  data: { someKey: 'someValue' } }
+
+test('calls the index action', () => {
+  let actual, response
+
+  let saga = get<%= props.name %>s(FixtureAPI, action)
+
+  actual = saga.next(action.data).value
+  expect(actual).toEqual(call(FixtureAPI.get<%= pascalCase(props.name) %>s, action.data))
+  response = {
+    ok: true,
+    data: { data: { attributes: { something: 'someValue' } } }
+  }
+
+  actual = saga.next(response).value
+  expect(actual).toEqual(put(<%= props.name %>Actions.<%= camelCase(props.name) %>AllSuccess(mapAttributes(response.data))))
+
+  expect(saga.next().done).toEqual(true)
+})
+
+test('calls the index action, but fails', () => {
+  let actual, response
+
+  let saga = get<%= props.name %>s(FixtureAPI, action)
+
+  actual = saga.next(action.data).value
+  expect(actual).toEqual(call(FixtureAPI.get<%= pascalCase(props.name) %>s, action.data))
+
+  response = {
+    ok: false,
+    data: {
+      errors: [{ detail: 'An error goes here' }]
+    }
+  }
+
+  actual = saga.next(response).value
+  expect(actual).toEqual(
+    put(<%= props.name %>Actions.<%= camelCase(props.name) %>Failure(response.data.errors))
+  )
+
+  expect(actual).toEqual(put(<%= props.name %>Actions.<%= camelCase(props.name) %>Failure(response.data.errors)))
+  expect(saga.next().done).toEqual(true)
+})
+
+
+test('posts successfully', () => {
+  let actual
+
+  let saga = post<%= props.name %>(FixtureAPI, action)
+
+  // actual = saga.next(action.data).value
+  // expect(actual).toEqual(call(FixtureAPI.post<%= pascalCase(props.name) %>, action.data))
+
+  // actual = saga.next(okIDResponse).value
+  // expect(actual).toEqual(put(<%= props.name %>Actions.<%= camelCase(props.name) %>SingleSuccess(transformedData(okIDResponse))))
+
+  // actual = saga.next(okIDResponse).value
+  // expect(actual).toEqual(
+  //   put(<%= props.name %>Actions.<%= camelCase(props.name) %>Data(transformedData(okIDResponse)))
+  // )
+
+  // actual = saga.next().value
+  // expect(actual).toEqual(select(theMulti))
+
+  // let multi = [{ id: 'aValue', name: 'aSomething' }]
+  // actual = saga.next(multi).value
+  // expect(actual).toEqual(put(<%= props.name %>Actions.<%= camelCase(props.name) %>AllSuccess(insertMulti(transformedData(okIDResponse), multi))))
+
+  // actual = saga.next().value
+  // // expect(actual).toEqual(call(showSagaMessage, 'saved'))
+
+  // expect(saga.next().done).toEqual(true)
+})
+
+test('posts, but the server returns an error', () => {
+  let actual, response
+
+  // let saga = post<%= props.name %>(FixtureAPI, action)
+
+  // actual = saga.next(action.data).value
+  // expect(actual).toEqual(call(FixtureAPI.post<%= pascalCase(props.name) %>, action.data))
+  // response = { ok: false, data: {
+  //   errors: [{ detail: "An error goes here" }]
+  //   }
+  // }
+
+  // actual = saga.next(response).value
+  // expect(actual).toEqual(put(<%= props.name %>Actions.<%= camelCase(props.name) %>Failure(response.data.errors)))
+
+  // actual = saga.next().value
+  // // expect(actual).toEqual(call(showSagaMessage, 'error'))
+
+  // expect(saga.next().done).toEqual(true)
+})
+
+test('patches/edits successfully', () => {
+  let actual, response
+
+  // let saga = update<%= props.name %>(FixtureAPI, action)
+
+  // actual = saga.next().value
+  // expect(actual).toEqual(select(theData))
+
+
+  // actual = saga.next(action.data).value
+  // expect(actual).toEqual(call(FixtureAPI.update<%= pascalCase(props.name) %>, action.data))
+  // response = { ok: true, data: { data: { attributes: { id: 'someValue' } } } }
+
+
+  // actual = saga.next(response).value
+  // expect(actual).toEqual(put(<%= props.name %>Actions.<%= camelCase(props.name) %>SingleSuccess(transformedData(response))))
+
+  // actual = saga.next(response).value
+  // expect(actual).toEqual(
+  //   put(<%= props.name %>Actions.<%= camelCase(props.name) %>Data(transformedData(response)))
+  // )
+
+  // actual = saga.next().value
+  // expect(actual).toEqual(select(theMulti))
+
+  // let multi = [{ id: 'someValue' }]
+  // actual = saga.next(multi).value
+  // expect(actual).toEqual(put(<%= props.name %>Actions.<%= camelCase(props.name) %>AllSuccess(updateMulti(transformedData(response), multi))))
+
+  // actual = saga.next(response).value
+  // // expect(actual).toEqual(call(showSagaMessage, 'saved'))
+
+  // expect(saga.next().done).toEqual(true)
+})
+
+test('patches/edits but fails with server error', () => {
+  let actual, response
+
+  // let saga = update<%= props.name %>(FixtureAPI, action)
+
+  // actual = saga.next().value
+  // expect(actual).toEqual(select(theData))
+
+  // actual = saga.next(action.data).value
+  // expect(actual).toEqual(call(FixtureAPI.update<%= pascalCase(props.name) %>, action.data))
+
+  // response = {
+  //   ok: false,
+  //   data: {
+  //     errors: [{ detail: 'An error goes here' }]
+  //   }
+  // }
+
+  // actual = saga.next(response).value
+  // expect(actual).toEqual(
+  //   put(<%= props.name %>Actions.<%= camelCase(props.name) %>Failure(response.data.errors))
+  // )
+
+  // actual = saga.next(response).value
+  // // expect(actual).toEqual(call(showSagaMessage, 'error'))
+
+  // expect(saga.next().done).toEqual(true)
+})

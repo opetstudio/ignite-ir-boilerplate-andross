@@ -1,0 +1,8 @@
+// a library to wrap and simplify api calls
+export const create = (api) => ({
+  post<%=props.name%>: data => api.post('<%=props.lowerName%>s/', { <%=props.lowerName%>: data }),
+  get<%=props.name%>: data => api.get('<%=props.lowerName%>s/' + data.id ),
+  get<%=props.name%>s: data => api.get('<%=props.lowerName%>s/'),
+  update<%=props.name%>: data => api.patch('<%=props.lowerName%>s/' + data.id, { <%=props.lowerName%>: data }),
+  remove<%=props.name%>: data => api.delete('<%=props.lowerName%>s/' + data.id ),
+})

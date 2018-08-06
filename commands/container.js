@@ -21,12 +21,12 @@ module.exports = async function (context) {
   const jobs = [
     {
       template: 'container.ejs',
-      target: `App/Containers/${name}.js`
-    },
-    {
-      template: 'container-style.ejs',
-      target: `App/Containers/Styles/${name}Style.js`
+      target: `src/containers/${name}/index.js`
     }
+    // {
+    //   template: 'container-style.ejs',
+    //   target: `src/containers/${name}/styles.js`
+    // }
   ]
 
   await ignite.copyBatch(context, jobs, props)
@@ -35,8 +35,8 @@ module.exports = async function (context) {
   // and insert the container into the nav router
   if (config.navigation === 'react-navigation') {
     const containerName = name
-    const appNavFilePath = `${process.cwd()}/App/Navigation/AppNavigation.js`
-    const importToAdd = `import ${containerName} from '../Containers/${containerName}'`
+    const appNavFilePath = `${process.cwd()}/src/Navigation/AppNavigation.js`
+    const importToAdd = `import ${containerName} from '../containers/${containerName}'`
     const routeToAdd = `  ${containerName}: { screen: ${containerName} },`
 
     if (!filesystem.exists(appNavFilePath)) {

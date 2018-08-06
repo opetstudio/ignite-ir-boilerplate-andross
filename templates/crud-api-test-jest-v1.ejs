@@ -1,0 +1,41 @@
+import API from '../../../Services/Api'
+
+const baseUrl = 'https://jsonplaceholder.typicode.com/'
+const api = API.create(baseUrl)
+
+test('Api get<%=props.name%>s', async () => {
+  const response = await api.get<%=props.name%>s()
+  const hasData = 'data' in response
+  expect(hasData).toBe(true)
+})
+test('Api get<%=props.name%>', async () => {
+  const id = 1
+  const response = await api.get<%=props.name%>({id})
+  const hasData = 'data' in response
+  expect(hasData).toBe(true)
+})
+test('Api post<%=props.name%>', async () => {
+  const data = {
+    'field1': 'value1'
+  }
+  const response = await api.post<%=props.name%>(data)
+  const hasData = 'data' in response
+  expect(hasData).toBe(true)
+})
+test('Api update<%=props.name%>', async () => {
+  const data = {
+    'id': 1,
+    'field1': 'value1'
+  }
+  const response = await api.update<%=props.name%>(data)
+  const hasData = 'data' in response
+  expect(hasData).toBe(true)
+})
+test('Api remove<%=props.name%>', async () => {
+  const data = {
+    'id': 1
+  }
+  const response = await api.remove<%=props.name%>(data)
+  const hasData = 'data' in response
+  expect(hasData).toBe(true)
+})
