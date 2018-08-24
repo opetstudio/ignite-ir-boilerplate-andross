@@ -1,41 +1,50 @@
 import API from '../../../Services/Api'
+import {path} from 'ramda'
 
-const baseUrl = 'https://jsonplaceholder.typicode.com/'
+const baseUrl = 'http://45.77.249.229:3003/'
 const api = API.create(baseUrl)
 
-test('Api get<%=props.name%>s', async () => {
-  const response = await api.get<%=props.name%>s()
-  const hasData = 'data' in response
-  expect(hasData).toBe(true)
-})
+// TEST CASE 1: pastikan server response harus ada field2 mandatori: (status, data, data.status, data.resp, data.resp.data)
 test('Api get<%=props.name%>', async () => {
-  const id = 1
-  const response = await api.get<%=props.name%>({id})
-  const hasData = 'data' in response
-  expect(hasData).toBe(true)
+  const _id = '5b726f33d25ece089148a979'
+  const response = await api.get<%=props.name%>({_id})
+  console.log('response from server: ', response)
+
+  // pengecekan field2 mandatori
+  expect(path(['status'], response) !== undefined).toBe(true)
+  expect(path(['data'], response) !== undefined).toBe(true)
+  expect(path(['data', 'status'], response) !== undefined).toBe(true)
+  expect(path(['data', 'resp'], response) !== undefined).toBe(true)
+  expect(path(['data', 'resp', 'data'], response) !== undefined).toBe(true)
 })
-test('Api post<%=props.name%>', async () => {
-  const data = {
-    'field1': 'value1'
-  }
-  const response = await api.post<%=props.name%>(data)
-  const hasData = 'data' in response
-  expect(hasData).toBe(true)
-})
-test('Api update<%=props.name%>', async () => {
-  const data = {
-    'id': 1,
-    'field1': 'value1'
-  }
-  const response = await api.update<%=props.name%>(data)
-  const hasData = 'data' in response
-  expect(hasData).toBe(true)
-})
-test('Api remove<%=props.name%>', async () => {
-  const data = {
-    'id': 1
-  }
-  const response = await api.remove<%=props.name%>(data)
-  const hasData = 'data' in response
-  expect(hasData).toBe(true)
-})
+
+// test('Api get<%=props.name%>s', async () => {
+//   const response = await api.get<%=props.name%>s()
+//   const hasData = 'data' in response
+//   expect(hasData).toBe(true)
+// })
+// test('Api post<%=props.name%>', async () => {
+//   const data = {
+//     'field1': 'value1'
+//   }
+//   const response = await api.post<%=props.name%>(data)
+//   const hasData = 'data' in response
+//   expect(hasData).toBe(true)
+// })
+// test('Api update<%=props.name%>', async () => {
+//   const data = {
+//     'id': 1,
+//     'field1': 'value1'
+//   }
+//   const response = await api.update<%=props.name%>(data)
+//   const hasData = 'data' in response
+//   expect(hasData).toBe(true)
+// })
+// test('Api remove<%=props.name%>', async () => {
+//   const data = {
+//     'id': 1
+//   }
+//   const response = await api.remove<%=props.name%>(data)
+//   const hasData = 'data' in response
+//   expect(hasData).toBe(true)
+// })

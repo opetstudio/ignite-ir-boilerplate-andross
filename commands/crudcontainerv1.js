@@ -154,32 +154,39 @@ module.exports = async function (context) {
   // insert redux require
   ignite.patchInFile(indexFilePath, {
     after: patterns[patterns.constants.PATTERN_IMPORTS_REDUX_TO_INDEX],
-    insert: toAdd
+    insert: ` // begin Ignite-Entity-${name}
+    ${lowerName}: require('../${containerFolderName}/${name}/redux').reducer,
+    // end Ignite-Entity-${name}`
   })
 
   // insert saga import
   ignite.patchInFile(indexSagaFilePath, {
     after: patterns[patterns.constants.PATTERN_IMPORTS_SAGA_TO_INDEX],
-    insert: importSagaToAdd
+    insert: ` // begin Ignite-Entity-${name}
+    import { post${sagaName}, get${sagaName}s, get${sagaName}, update${sagaName}, remove${sagaName} } from '../${containerFolderName}/${name}/sagas'
+    // end Ignite-Entity-${name}`
   })
 
   ignite.patchInFile(indexSagaFilePath, {
     after: patterns[patterns.constants.PATTERN_SAGA_ACTION],
-    insert: `    takeLatest(${sagaName}Types.${upperName}_REQUEST, get${sagaName}, api),
+    insert: ` // begin Ignite-Entity-${name}
+    takeLatest(${sagaName}Types.${upperName}_REQUEST, get${sagaName}, api),
     takeLatest(${sagaName}Types.${upperName}_ALL, get${sagaName}s, api),
     takeLatest(${sagaName}Types.${upperName}_ATTEMPT, post${sagaName}, api),
     takeLatest(${sagaName}Types.${upperName}_UPDATE, update${sagaName}, api),
-    takeLatest(${sagaName}Types.${upperName}_REMOVE, remove${sagaName}, api),`
+    takeLatest(${sagaName}Types.${upperName}_REMOVE, remove${sagaName}, api),
+    // end Ignite-Entity-${name}`
   })
 
   ignite.patchInFile(fixtureFilePath, {
     after: '// Functions return fixtures',
-    insert: `
+    insert: ` // begin Ignite-Entity-${name}
     post${sagaName}: () => { return { ok: true, data: '21' } },
     get${sagaName}: () => { return { ok: true, data: '21' } },
     get${sagaName}s: () => { return { ok: true, data: '21' } },
     update${sagaName}: () => { return { ok: true, data: '21' } },
-    remove${sagaName}: () => { return { ok: true } },`
+    remove${sagaName}: () => { return { ok: true } },
+    // end Ignite-Entity-${name}`
   })
 
   // ignite.patchInFile(apiFilePath, {
@@ -189,13 +196,17 @@ module.exports = async function (context) {
 
   ignite.patchInFile(apiFilePath, {
     after: '// merge api',
-    insert: `apiMerged = merge(apiMerged, require('../${containerFolderName}/${name}/api').create(api))`
+    insert: ` // begin Ignite-Entity-${name}
+    apiMerged = merge(apiMerged, require('../${containerFolderName}/${name}/api').create(api))
+    // end Ignite-Entity-${name}`
   })
 
   // insert saga import
   ignite.patchInFile(indexSagaFilePath, {
     after: '------------- Types -------------',
-    insert: importReduxToAdd
+    insert: ` // begin Ignite-Entity-${name}
+    import { ${reduxName}Types } from '../${containerFolderName}/${name}/redux'
+    // end Ignite-Entity-${name}`
   })
 
   // if using `react-navigation` go the extra step
